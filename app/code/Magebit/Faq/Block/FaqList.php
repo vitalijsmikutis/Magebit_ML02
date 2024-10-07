@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the Magebit package.
  *
@@ -14,7 +13,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 
 namespace Magebit\Faq\Block;
@@ -24,7 +22,12 @@ use Magebit\Faq\Api\FaqRepositoryInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
-
+/**
+ * This class is responsible for rendering the list of enabled FAQ questions on the front-end.
+ * It fetches the list of FAQs from the repository and assigns it to the template.
+ *
+ * @package Magebit\Faq\Block
+ */
 class FaqList extends Template
 {
     public function __construct(
@@ -46,6 +49,8 @@ class FaqList extends Template
 
     /**
      * Set the template variables for the FAQ list.
+     *
+     * @return void
      */
     protected function _prepareLayout(): void
     {

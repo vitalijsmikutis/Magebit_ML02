@@ -13,64 +13,72 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 
 namespace Magebit\Faq\Model;
 
+use Exception;
 use Magebit\Faq\Api\Data\FaqInterface;
 use Magebit\Faq\Api\FaqManagementInterface;
 use Magebit\Faq\Api\FaqRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Psr\Log\LoggerInterface;
 
 class FaqManagement implements FaqManagementInterface
 {
     /**
      * @param FaqRepositoryInterface $faqRepository
+     * @param LoggerInterface $logger
      */
     public function __construct(
-        private readonly FaqRepositoryInterface $faqRepository
+        private readonly FaqRepositoryInterface $faqRepository,
+        private readonly LoggerInterface $logger
     ) {
     }
 
     /**
-     * Enable FAQ question.
-     *
-     * @param int $faqId
-     * @return void
-     * @throws NoSuchEntityException
+     * @inheritDoc
      */
     public function enableQuestion(int $faqId): void
-    {
+    {try {
         $faq = $this->faqRepository->getById($faqId);
         $faq->setStatus(FaqInterface::STATUS_ENABLED);
         $this->faqRepository->save($faq);
+    } catch (NoSuchEntityException $e) {
+        $this->logger->error('FAQ not found for ID ' . $faqId . ': ' . $e->getMessage());
+    } catch (Exception $e) {
+        $this->logger->error('Error enabling FAQ ID ' . $faqId . ': ' . $e->getMessage());
+    }
     }
 
     /**
-     * Disable FAQ question.
-     *
-     * @param int $faqId
-     * @return void
-     * @throws NoSuchEntityException
+     * @inheritDoc
      */
     public function disableQuestion(int $faqId): void
     {
-        $faq = $this->faqRepository->getById($faqId);
-        $faq->setStatus(FaqInterface::STATUS_DISABLED);
-        $this->faqRepository->save($faq);
+        try {
+            $faq = $this->faqRepository->getById($faqId);
+            $faq->setStatus(FaqInterface::STATUS_DISABLED);
+            $this->faqRepository->save($faq);
+        } catch (NoSuchEntityException $e) {
+            $this->logger->error('FAQ not found for ID ' . $faqId . ': ' . $e->getMessage());
+        } catch (Exception $e) {
+            $this->logger->error('Error disabling FAQ ID ' . $faqId . ': ' . $e->getMessage());
+        }
     }
 
     /**
-     * Get all FAQ questions.
-     *
-     * @return FaqInterface[]
+     * @inheritDoc
      */
-
     public function getApplicableFaq(): array
     {
-        return array_filter($this->faqRepository->getList(), function (FaqInterface $faq) {
-            return $faq->getStatus() === FaqInterface::STATUS_ENABLED;
-        });
+        try {
+            return array_filter($this->faqRepository->getList(), function (FaqInterface $faq) {
+                return $faq->getStatus() === FaqInterface::STATUS_ENABLED;
+            });
+        } catch (Exception $e) {
+            $this->logger->error('Error retrieving applicable FAQs: ' . $e->getMessage());
+            return [];
+        }
     }
 }

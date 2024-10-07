@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the Magebit package.
  *
@@ -14,7 +13,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 
 namespace Magebit\Faq\Model;
@@ -49,20 +47,7 @@ class Faq extends AbstractModel implements FaqInterface
     }
 
     /**
-     * Get FAQ ID.
-     *
-     * @return int|null
-     */
-    public function getId(): ?int
-    {
-        $id = $this->getData(self::ID);
-        return $id !== null ? (int) $id : null;
-    }
-
-    /**
-     * Get FAQ question.
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getQuestion(): string
     {
@@ -70,20 +55,15 @@ class Faq extends AbstractModel implements FaqInterface
     }
 
     /**
-     * Set FAQ question.
-     *
-     * @param string $question
-     * @return void
+     * @inheritDoc
      */
-    public function setQuestion(string $question): void
+    public function setQuestion(string $question): FaqInterface
     {
-        $this->setData(self::QUESTION, $question);
+        return $this->setData(self::QUESTION, $question);
     }
 
     /**
-     * Get FAQ answer.
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getAnswer(): string
     {
@@ -91,62 +71,47 @@ class Faq extends AbstractModel implements FaqInterface
     }
 
     /**
-     * Set FAQ answer.
-     *
-     * @param string $answer
-     * @return void
+     * @inheritDoc
      */
-    public function setAnswer(string $answer): void
+    public function setAnswer(string $answer): FaqInterface
     {
-        $this->setData(self::ANSWER, $answer);
+        return $this->setData(self::ANSWER, $answer);
     }
 
     /**
-     * Get FAQ status.
-     *
-     * @return int
+     * @inheritDoc
      */
     public function getStatus(): int
     {
-        return (int) $this->getData(self::STATUS);
+        return (int)$this->getData(self::STATUS);
     }
 
     /**
-     * Set FAQ status.
-     *
-     * @param int $status
-     * @return void
+     * @inheritDoc
      */
-    public function setStatus(int $status): void
+    public function setStatus(int $status): FaqInterface
     {
-        $this->setData(self::STATUS, $status);
+        return $this->setData(self::STATUS, $status);
     }
 
     /**
-     * Get FAQ position.
-     *
-     * @return int
+     * @inheritDoc
      */
     public function getPosition(): int
     {
-        return (int) $this->getData(self::POSITION);
+        return (int)$this->getData(self::POSITION);
     }
 
     /**
-     * Set FAQ position.
-     *
-     * @param int $position
-     * @return void
+     * @inheritDoc
      */
-    public function setPosition(int $position): void
+    public function setPosition(int $position): FaqInterface
     {
-        $this->setData(self::POSITION, $position);
+        return $this->setData(self::POSITION, $position);
     }
 
     /**
-     * Get last updated time.
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getUpdatedAt(): string
     {

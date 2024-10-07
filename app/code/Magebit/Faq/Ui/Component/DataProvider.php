@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the Magebit package.
  *
@@ -14,7 +13,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 
 namespace Magebit\Faq\Ui\Component;
@@ -34,8 +32,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider as Mage
  */
 class DataProvider extends MagentoDataProvider
 {
-    /** @var AddFilterInterface[] */
-    private array $additionalFilterPool;
+
 
     /**
      * Constructor.
@@ -61,7 +58,7 @@ class DataProvider extends MagentoDataProvider
         FilterBuilder $filterBuilder,
         array $meta = [],
         array $data = [],
-        array $additionalFilterPool = []
+        private readonly array $additionalFilterPool = [],
     ) {
         parent::__construct(
             $name,
@@ -72,10 +69,9 @@ class DataProvider extends MagentoDataProvider
             $request,
             $filterBuilder,
             $meta,
-            $data
+            $data,
         );
 
-        $this->additionalFilterPool = $additionalFilterPool;
     }
 
     /**

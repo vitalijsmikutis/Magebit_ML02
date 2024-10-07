@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the Magebit package.
  *
@@ -14,7 +13,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 
 namespace Magebit\Faq\Block\Adminhtml\Faq\Edit;
@@ -24,6 +22,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
 use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class GenericButton
@@ -38,11 +37,13 @@ class GenericButton
      * @param Context $context
      * @param UrlInterface $url
      * @param BlockRepositoryInterface $blockRepository
+     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly Context $context,
         private readonly UrlInterface $url,
-        private readonly BlockRepositoryInterface $blockRepository
+        private readonly BlockRepositoryInterface $blockRepository,
+        private readonly LoggerInterface $logger
     ) {
     }
 
@@ -55,13 +56,15 @@ class GenericButton
     public function getBlockId(): ?int
     {
         try {
-            return $this->blockRepository->getById(
-                $this->context->getRequest()->getParam('block_id')
-            )->getId();
+            $blockId = $this->context->getRequest()->getParam('block_id');
+            $block = $this->blockRepository->getById($blockId);
+
+            return $block->getId();
         } catch (NoSuchEntityException $e) {
-            // Handle exception if needed
+            $this->logger->error(__('Block not found: %1', $e->getMessage()));
+
+            return null;
         }
-        return null;
     }
 
     /**

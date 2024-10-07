@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the Magebit package.
  *
@@ -14,7 +13,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 
 namespace Magebit\Faq\Api;
@@ -45,7 +43,6 @@ interface FaqRepositoryInterface
      *
      * @param int $faqId The ID of the FAQ to retrieve.
      * @return FaqInterface
-     * @throws NoSuchEntityException If the FAQ with the specified ID does not exist.
      */
     public function getById(int $faqId): FaqInterface;
 
@@ -56,4 +53,11 @@ interface FaqRepositoryInterface
      * @return void
      */
     public function delete(FaqInterface $faq): void;
+
+    /**
+     * Get all FAQ entities.
+     *
+     * @return FaqInterface[]
+     */
+    public function getEnabledFaqs(): array;
 }

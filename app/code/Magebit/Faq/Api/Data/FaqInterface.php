@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the Magebit package.
  *
@@ -14,7 +13,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 
 namespace Magebit\Faq\Api\Data;
@@ -30,12 +28,6 @@ interface FaqInterface
     public const STATUS_ENABLED = 1;
     public const STATUS_DISABLED = 0;
 
-    /**
-     * Get the FAQ ID.
-     *
-     * @return int|null The FAQ ID or null if not set.
-     */
-    public function getId(): ?int;
 
     /**
      * Get the FAQ question.
@@ -48,9 +40,9 @@ interface FaqInterface
      * Set the FAQ question.
      *
      * @param string $question The FAQ question.
-     * @return void
+     * @return FaqInterface
      */
-    public function setQuestion(string $question): void;
+    public function setQuestion(string $question): FaqInterface;
 
     /**
      * Get the FAQ answer.
@@ -63,9 +55,9 @@ interface FaqInterface
      * Set the FAQ answer.
      *
      * @param string $answer The FAQ answer.
-     * @return void
+     * @return FaqInterface
      */
-    public function setAnswer(string $answer): void;
+    public function setAnswer(string $answer): FaqInterface;
 
     /**
      * Get the FAQ status.
@@ -78,9 +70,9 @@ interface FaqInterface
      * Set the FAQ status.
      *
      * @param int $status The FAQ status (enabled or disabled).
-     * @return void
+     * @return FaqInterface
      */
-    public function setStatus(int $status): void;
+    public function setStatus(int $status): FaqInterface;
 
     /**
      * Get the position of the FAQ.
@@ -93,9 +85,9 @@ interface FaqInterface
      * Set the position of the FAQ.
      *
      * @param int $position The position of the FAQ.
-     * @return void
+     * @return FaqInterface
      */
-    public function setPosition(int $position): void;
+    public function setPosition(int $position): FaqInterface;
 
     /**
      * Get the timestamp of when the FAQ was last updated.

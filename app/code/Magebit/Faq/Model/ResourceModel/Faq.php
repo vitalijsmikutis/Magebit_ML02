@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the Magebit package.
  *
@@ -14,7 +13,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 
 namespace Magebit\Faq\Model\ResourceModel;
@@ -45,15 +43,4 @@ class Faq extends AbstractDb
         );
     }
 
-    /**
-     * Update updated_at field before saving the object.
-     *
-     * @param AbstractModel $object
-     * @return AbstractDb
-     */
-    protected function _beforeSave(AbstractModel $object): AbstractDb
-    {
-        $object->setData('updated_at', 0);
-        return parent::_beforeSave($object);
-    }
 }

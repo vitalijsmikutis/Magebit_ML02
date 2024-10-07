@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the Magebit package.
  *
@@ -14,89 +13,83 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 
 namespace Magebit\Faq\Model;
 
 use Exception;
-use InvalidArgumentException;
 use Magebit\Faq\Api\Data\FaqInterface;
 use Magebit\Faq\Api\FaqRepositoryInterface;
 use Magebit\Faq\Model\ResourceModel\Faq as FaqResource;
-use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Psr\Log\LoggerInterface;
 
 class FaqRepository implements FaqRepositoryInterface
 {
     /**
      * @param FaqResource $faqResource
      * @param FaqFactory $factory
+     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly FaqResource $faqResource,
-        private readonly FaqFactory $factory
+        private readonly FaqFactory $factory,
+        private readonly LoggerInterface $logger
     ) {
     }
 
     /**
-     * Save FAQ entity.
-     *
-     * @param FaqInterface $faq
-     * @return void
-     * @throws InvalidArgumentException
-     * @throws AlreadyExistsException
+     * @inheritDoc
      */
     public function save(FaqInterface $faq): void
     {
-        $this->faqResource->save($faq);
+        try {
+            $this->faqResource->save($faq);
+        } catch (Exception $e) {
+            $this->logger->error('Error saving FAQ: ' . $e->getMessage());
+        }
     }
 
     /**
-     * Delete FAQ entity.
-     *
-     * @param FaqInterface $faq
-     * @return void
-     * @throws InvalidArgumentException|Exception
+     * @inheritDoc
      */
     public function delete(FaqInterface $faq): void
     {
-
-        $this->faqResource->delete($faq);
+        try {
+            $this->faqResource->delete($faq);
+        } catch (Exception $e) {
+            $this->logger->error('Error deleting FAQ: ' . $e->getMessage());
+        }
     }
 
     /**
-     * Get FAQ by ID.
-     *
-     * @param int $faqId
-     * @return FaqInterface
-     * @throws NoSuchEntityException
+     * @inheritDoc
      */
     public function getById(int $faqId): FaqInterface
     {
         $faq = $this->factory->create();
-        $this->faqResource->load($faq, $faqId);
-        if (!$faq->getId()) {
-            throw new NoSuchEntityException(
-                __('FAQ with id "%1" does not exist.', $faqId)
-            );
+        try {
+            $this->faqResource->load($faq, $faqId);
+        } catch (NoSuchEntityException $e) {
+            $this->logger->error('FAQ not found for ID ' . $faqId . ': ' . $e->getMessage());
+        } catch (Exception $e) {
+            $this->logger->error('Error loading FAQ ID ' . $faqId . ': ' . $e->getMessage());
         }
         return $faq;
     }
 
-
     /**
-     * Get all enabled FAQs.
-     *
-     * @return FaqInterface[]
+     * @inheritDoc
      */
     public function getEnabledFaqs(): array
     {
-        $faqCollection = $this->factory->create()->getCollection();
-        $faqCollection->addFieldToFilter('status', FaqInterface::STATUS_ENABLED);
-
-        return $faqCollection->getItems();
+        try {
+            $faqCollection = $this->factory->create()->getCollection();
+            $faqCollection->addFieldToFilter('status', FaqInterface::STATUS_ENABLED);
+            return $faqCollection->getItems();
+        } catch (Exception $e) {
+            $this->logger->error('Error retrieving enabled FAQs: ' . $e->getMessage());
+            return [];
+        }
     }
-
-
 }

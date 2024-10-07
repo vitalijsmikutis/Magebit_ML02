@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the Magebit package.
  *
@@ -14,7 +13,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 
 namespace Magebit\Faq\Ui\Faq;
@@ -38,11 +36,6 @@ class DataProvider extends ModifierPoolDataProvider
     protected $collection;
 
     /**
-     * @var DataPersistorInterface
-     */
-    protected $dataPersistor;
-
-    /**
      * @var array
      */
     private array $loadedData = [];
@@ -64,13 +57,12 @@ class DataProvider extends ModifierPoolDataProvider
         string $primaryFieldName,
         string $requestFieldName,
         CollectionFactory $blockCollectionFactory,
-        DataPersistorInterface $dataPersistor,
+       private readonly DataPersistorInterface $dataPersistor,
         array $meta = [],
         array $data = [],
-        PoolInterface $pool = null
+        PoolInterface $pool = null,
     ) {
         $this->collection = $blockCollectionFactory->create();
-        $this->dataPersistor = $dataPersistor;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);
     }
 

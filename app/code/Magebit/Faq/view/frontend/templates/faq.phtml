@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the Magebit package.
  *
@@ -14,7 +13,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 ?>
 <div
@@ -35,16 +33,16 @@ declare(strict_types=1);
                 <div class="accordion-item" data-role="collapsible">
                     <div class="accordion-header" data-role="trigger"
                          style="background-color: lightgray; padding: 10px;">
-                        <strong class="accordion-title"><?php echo $this->escapeHtml($faq->getQuestion()); ?></strong>
+                        <strong class="accordion-title"><?= $this->escapeHtml($faq->getQuestion()); ?></strong>
                     </div>
                     <div class="accordion-content" data-role="content" style="padding: 10px;">
-                        <p><?php echo $this->escapeHtml($faq->getAnswer()); ?></p>
+                        <p><?= $this->escapeHtml($faq->getAnswer()); ?></p>
                     </div>
                 </div>
             <?php endforeach; ?>
         </div>
     <?php else: ?>
-        <p>No FAQs available.</p>
+        <p><?= __('No FAQs available.'); ?></p>
     <?php endif; ?>
 </div>
 

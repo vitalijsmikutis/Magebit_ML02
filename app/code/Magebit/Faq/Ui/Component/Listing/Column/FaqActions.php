@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the Magebit package.
  *
@@ -14,7 +13,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 
 namespace Magebit\Faq\Ui\Component\Listing\Column;
@@ -35,8 +33,6 @@ class FaqActions extends Column
     private const URL_PATH_EDIT = 'magebit_faq/faq/edit';
     private const URL_PATH_DELETE = 'magebit_faq/faq/delete';
 
-    private UrlInterface $urlBuilder;
-    private Escaper $escaper;
 
     /**
      * FaqActions constructor.
@@ -51,14 +47,12 @@ class FaqActions extends Column
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        UrlInterface $urlBuilder,
-        Escaper $escaper,
+        private readonly UrlInterface $urlBuilder,
+        private readonly Escaper $escaper,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
-        $this->urlBuilder = $urlBuilder;
-        $this->escaper = $escaper;
     }
 
     /**

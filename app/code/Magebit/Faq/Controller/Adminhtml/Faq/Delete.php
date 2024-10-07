@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the Magebit package.
  *
@@ -14,7 +13,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 
 namespace Magebit\Faq\Controller\Adminhtml\Faq;
@@ -24,6 +22,7 @@ use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action\Context;
+use Psr\Log\LoggerInterface;
 use Throwable;
 use Magento\Framework\Controller\Result\Redirect;
 
@@ -39,12 +38,14 @@ class Delete extends Action
     /**
      * @param Context $context
      * @param FaqRepositoryInterface $faqRepository
+     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly Context $context,
-        private readonly FaqRepositoryInterface $faqRepository
+        private readonly FaqRepositoryInterface $faqRepository,
+        private readonly LoggerInterface $logger
     ) {
-        parent::__construct($context);
+        parent::__construct($this->context);
     }
 
     /**
@@ -54,31 +55,38 @@ class Delete extends Action
      */
     public function execute(): ResultInterface
     {
-        $faqId = (int)$this->getRequest()->getParam('faq_id', 0);
+        $faqId = (int)$this->getRequest()->getParam('faq_id');
+
+        /** @var Redirect $result */
         $result = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         if (!$faqId) {
+            $this->logger->error('FAQ ID is missing.');
             $this->messageManager->addWarningMessage(__('FAQ with provided id was not found.'));
-            /** @var Redirect $result */
+
             return $result->setPath('magebit_faq/faq/index');
         }
 
         try {
             $faq = $this->faqRepository->getById($faqId);
+
             if (!$faq->getId()) {
+                $this->logger->error('FAQ with ID ' . $faqId . ' was not found.');
                 $this->messageManager->addWarningMessage(__('FAQ with provided id was not found.'));
-                /** @var Redirect $result */
-                return $result->setPath('magebit_faq/faq/index');
-            } else {
-                $this->faqRepository->delete($faq);
-                $this->messageManager->addSuccessMessage(__('The FAQ has been deleted.'));
-                /** @var Redirect $result */
+
                 return $result->setPath('magebit_faq/faq/index');
             }
+
+            $this->faqRepository->delete($faq);
+            $this->messageManager->addSuccessMessage(__('The FAQ has been deleted.'));
+
         } catch (Throwable $e) {
+            $this->logger->error('Error while deleting FAQ with ID ' . $faqId . ': ' . $e->getMessage());
             $this->messageManager->addErrorMessage(__('An error occurred while deleting the FAQ.'));
-            /** @var Redirect $result */
+
             return $result->setPath('magebit_faq/faq/index');
         }
+
+        return $result->setPath('magebit_faq/faq/index');
     }
 }

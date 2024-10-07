@@ -13,7 +13,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 
 namespace Magebit\Faq\Controller\Index;
@@ -40,7 +39,7 @@ class Index extends Action
         private readonly Context $context,
         private readonly PageFactory $resultPageFactory
     ) {
-        parent::__construct($context);
+        parent::__construct($this->context);
     }
 
     /**

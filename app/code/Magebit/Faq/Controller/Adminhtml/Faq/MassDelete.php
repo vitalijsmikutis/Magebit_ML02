@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the Magebit package.
  *
@@ -14,7 +13,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 
 namespace Magebit\Faq\Controller\Adminhtml\Faq;
@@ -25,9 +23,9 @@ use Magebit\Faq\Model\ResourceModel\Faq\CollectionFactory;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Backend\App\Action\Context;
+use Psr\Log\LoggerInterface;
 use Throwable;
 use Magento\Framework\Controller\Result\Redirect;
 
@@ -41,48 +39,51 @@ use Magento\Framework\Controller\Result\Redirect;
 class MassDelete extends Action
 {
     /**
-     * Constructor
-     *
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
      * @param FaqRepositoryInterface $faqRepository
+     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly Context $context,
         private readonly Filter $filter,
         private readonly CollectionFactory $collectionFactory,
         private readonly FaqRepositoryInterface $faqRepository,
+        private readonly LoggerInterface $logger
     ) {
-        parent::__construct($context);
+        parent::__construct($this->context);
     }
 
     /**
      * Execute action to handle mass delete requests
      *
      * @return ResultInterface
-     * @throws LocalizedException
      */
     public function execute(): ResultInterface
     {
         $collection = $this->filter->getCollection($this->collectionFactory->create());
         $collectionSize = $collection->getSize();
 
+        /** @var Redirect $result */
+        $result = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+
         try {
             /** @var FaqInterface $faq */
             foreach ($collection as $faq) {
                 $this->faqRepository->delete($faq);
             }
-            $this->messageManager->addSuccessMessage(__("A total of %1 record(s) have been deleted.", $collectionSize));
+            $this->messageManager->addSuccessMessage(__(
+                'A total of %1 record(s) have been deleted.',
+                $collectionSize
+            ));
         } catch (Throwable $exception) {
-            $this->messageManager->addErrorMessage(__("An error occurred while deleting the FAQ records."));
-            /** @var Redirect $resultRedirect */
-            $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-            return $resultRedirect->setPath('magebit_faq/faq/index');
+            $this->logger->error('Error occurred during mass delete', ['exception' => $exception->getMessage()]);
+            $this->messageManager->addErrorMessage(__('An error occurred while deleting the FAQ records.'));
+
+            return $result->setPath('magebit_faq/faq/index');
         }
 
-        /** @var Redirect $result */
-        $result = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $result->setPath('magebit_faq/faq/index');
     }
 }

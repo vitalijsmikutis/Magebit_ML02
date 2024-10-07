@@ -18,7 +18,9 @@ declare(strict_types=1);
 
 namespace Magebit\Faq\Api;
 
+use Exception;
 use Magebit\Faq\Api\Data\FaqInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Interface for managing FAQ questions.
@@ -33,6 +35,8 @@ interface FaqManagementInterface
      *
      * @param int $faqId The ID of the FAQ question to enable.
      * @return void
+     * @throws NoSuchEntityException If the FAQ with the given ID does not exist.
+     * @throws Exception If an error occurs while enabling the FAQ.
      */
     public function enableQuestion(int $faqId): void;
 
@@ -41,15 +45,16 @@ interface FaqManagementInterface
      *
      * @param int $faqId The ID of the FAQ question to disable.
      * @return void
+     * @throws NoSuchEntityException If the FAQ with the given ID does not exist.
+     * @throws Exception If an error occurs while disabling the FAQ.
      */
     public function disableQuestion(int $faqId): void;
 
     /**
-     * Get all FAQ questions.
+     * Get all applicable FAQ questions.
      *
      * @return FaqInterface[] An array of FAQ questions.
+     * @throws Exception If an error occurs while retrieving the FAQs.
      */
     public function getApplicableFaq(): array;
-
-
 }
