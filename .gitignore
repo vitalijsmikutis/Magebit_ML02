@@ -1,0 +1,54 @@
+# Magento generated folders
+/generated/*
+/var/*
+!/var/.htaccess
+/pub/static/*
+/pub/media/*
+/app/etc/env.php
+/app/etc/config.php
+
+# Composer
+/vendor/*
+/composer.lock
+
+# IDE or Editor files
+/.idea/
+/.vscode/
+/nbproject/
+
+# Log files
+*.log
+*.txt
+
+# Node.js dependencies
+/node_modules/
+/npm-debug.log
+/yarn-error.log
+
+# Docker
+/.docker
+/.dockerignore
+
+# Environment specific files
+.env
+
+# Backup files
+*.bak
+*.backup
+*.swp
+*.swo
+
+# Cache
+/cache/
+/tmp/
+
+# PHPUnit
+/phpunit.xml
+/phpunit.xml.dist
+
+# Dependency Security Audit files
+/.php_cs.cache
+/depcache.json
+
+# SFTP/FTP config files
+.sftp-config.json
