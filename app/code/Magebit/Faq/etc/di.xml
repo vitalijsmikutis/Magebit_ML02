@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!--
+    This file is part of the Magebit package.
+
+    DISCLAIMER
+
+    Do not edit or add to this file if you wish to upgrade Magebit AddToCart
+    to newer versions in the future.
+
+    @copyright Copyright (c) 2024 Magebit, Ltd. (https://magebit.com/)
+    @license GNU General Public License ("GPL") v3.0
+
+    For the full copyright and license information, please view the LICENSE
+    file that was distributed with this source code.
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <preference for="Magebit\Faq\Api\FaqRepositoryInterface" type="Magebit\Faq\Model\FaqRepository"/>
+    <preference for="Magebit\Faq\Api\Data\FaqInterface" type="Magebit\Faq\Model\Faq"/>
+    <preference for="Magebit\Faq\Api\FaqManagementInterface" type="Magebit\Faq\Model\FaqManagement"/>
+
+    <type name="Magebit\Faq\Block\FaqList">
+        <arguments>
+            <argument name="faqRepository" xsi:type="object">Magebit\Faq\Model\FaqRepository</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="magebit_faq_listing_data_source" xsi:type="string">
+                    Magebit\Faq\Model\ResourceModel\Faq\Grid\Collection
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magebit\Faq\Model\ResourceModel\Faq\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">magebit_faq</argument>
+            <argument name="eventPrefix" xsi:type="string">magebit_faq_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">faq_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Magebit\Faq\Model\ResourceModel\Faq</argument>
+        </arguments>
+    </type>
+</config>
+
+

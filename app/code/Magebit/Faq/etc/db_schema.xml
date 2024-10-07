@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+    This file is part of the Magebit package.
+
+    DISCLAIMER
+
+    Do not edit or add to this file if you wish to upgrade Magebit AddToCart
+    to newer versions in the future.
+
+    @copyright Copyright (c) 2024 Magebit, Ltd. (https://magebit.com/)
+    @license GNU General Public License ("GPL") v3.0
+
+    For the full copyright and license information, please view the LICENSE
+    file that was distributed with this source code.
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+
+    <table name="magebit_faq" resource="default" engine="innodb" comment="FAQ Table">
+        <column xsi:type="int" name="faq_id" padding="10" unsigned="true" nullable="false"
+                identity="true" comment="FAQ ID"/>
+        <column xsi:type="text" name="question" nullable="false" comment="Question"/>
+        <column xsi:type="text" name="answer" nullable="false" comment="Answer"/>
+        <column xsi:type="smallint" name="status" nullable="false" default="0" comment="Status"/>
+        <column xsi:type="int" name="position" nullable="false" default="0" comment="Position"/>
+        <column xsi:type="timestamp" name="updated_at" nullable="false" on_update="true"
+                default="CURRENT_TIMESTAMP" comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="faq_id"/>
+        </constraint>
+    </table>
+
+</schema>

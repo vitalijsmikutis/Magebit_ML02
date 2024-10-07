@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * This file is part of the Magebit package.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magebit ProductAttributes
+ * to newer versions in the future.
+ *
+ * @copyright Copyright (c) 2024 Magebit, Ltd. (https://magebit.com/)
+ * @license   GNU General Public License ("GPL") v3.0
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+?>
+<div
+    id="element"
+    data-mage-init='{
+        "accordion": {
+            "openedState": "active",
+            "collapsible": true,
+            "active": false,
+            "multipleCollapsible": true
+        }
+    }'
+    class="question table">
+
+    <?php if (!empty($faqList)): ?>
+        <div class="accordion">
+            <?php foreach ($faqList as $faq): ?>
+                <div class="accordion-item" data-role="collapsible">
+                    <div class="accordion-header" data-role="trigger"
+                         style="background-color: lightgray; padding: 10px;">
+                        <strong class="accordion-title"><?php echo $this->escapeHtml($faq->getQuestion()); ?></strong>
+                    </div>
+                    <div class="accordion-content" data-role="content" style="padding: 10px;">
+                        <p><?php echo $this->escapeHtml($faq->getAnswer()); ?></p>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php else: ?>
+        <p>No FAQs available.</p>
+    <?php endif; ?>
+</div>
+
+<script>
+    require([
+        'jquery',
+        'mage/accordion'
+    ], function ($) {
+        $('#element').accordion({
+            openedState: 'active',
+            collapsible: true,
+            active: false,
+            multipleCollapsible: true
+        });
+    });
+</script>
